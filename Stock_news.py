@@ -1,17 +1,19 @@
 import requests 
 import json
 
-ask_ticker = input(str('Insert desired ticker: '))
-
 with open('API_key.txt') as key:
     api_key = key.read()
 
-url = 'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=' + ask_ticker + '&sort=LATEST&limit=10&apikey=' + api_key
+tickers = ['AAPL', 'MSFT', 'GOOGL']
 
-r = requests.get(url)
-data = r.json()
+for ticker in tickers:
 
-sorted_data = (json.dumps(data, indent=4, sort_keys=True))
+    url = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=AAPL&sort=LATEST&limit=10&apikey={api_key}'
+
+    r = requests.get(url)
+    data = r.json()
+
+    sorted_data = (json.dumps(data, indent=4, sort_keys=True))
 
 
 with open('dict.txt', 'w') as file:
@@ -26,5 +28,4 @@ with open('test_data.txt', 'w') as file:
     
         
         file.write(str(tickers) + ':' + '\n' + str(summary) + '\n' + str(links) + '\n')
-
 
