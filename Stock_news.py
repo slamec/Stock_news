@@ -1,7 +1,23 @@
 import yfinance as yf 
-import json
+import json #to check json file
+import csv
 
-symbols = ['AAPL', 'GOOG', 'AMZN']
+portfolio = 'Portfolio.csv'
+
+def read_csv(file_name):
+    symbols = set()
+
+    with open(file_name, 'r') as file:
+        reader = csv.reader(file)
+        next(reader)  # skip header row
+        for row in reader:
+            symbols.add(row[0])
+
+    return list(symbols)
+
+symbols = read_csv(portfolio)
+
+#print(symbols)
 
 def ticker_news(stock_name):
     """This function accepts n number of ticker symbols and returns 3 top news for each."""
@@ -10,24 +26,29 @@ def ticker_news(stock_name):
     for symbol in stock_name:
         ticker = yf.Ticker(symbol)
         ticker_news = ticker.news
-
-        # data_sorted = json.dumps(ticker_news, indent=4, sort_keys=True)
         
         #new dictionary 
         news_dict = {}
+        
+        #keep track of news items that have already been added
+        added_news = set()
 
         #loop through yf dictionary
         for items in ticker_news:
-            related_ticker = items['relatedTickers']
+            try:
+                related_ticker = items['relatedTickers']
+            except KeyError:
+                related_ticker = []
             title = items['title']
             link = items['link']
             
             #avoid duplicates
-            for ticker in related_ticker:
-                if ticker not in news_dict:
-                    news_dict[ticker] = set()
-                else:
+            if (title, link) not in added_news:
+                for ticker in related_ticker:
+                    if ticker not in news_dict:
+                        news_dict[ticker] = set()
                     news_dict[ticker].add((title, link))
+                added_news.add((title, link))
 
         count = 0
 
@@ -43,7 +64,3 @@ def ticker_news(stock_name):
         print('\n')
 
 ticker_news(symbols)
-
-
-
-
