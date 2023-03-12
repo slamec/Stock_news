@@ -59,15 +59,15 @@ def ticker_news(stock_name, output_file):
             
             # Write news to file
             for title, link in news_dict.get(symbol, []):
-                f.write(f"{symbol}\n")
-                f.write(f"{title}\n")
-                f.write(f"{link}\n")
+                f.write(f"\n{symbol}\n")
+                f.write('\n')
+                f.write(f"<a href=\"{link}\">{title}</a>\n")
                 count += 1
                 if count == 3:
                     break
             
-            f.write('\n')
+            f.write('<br><br>\n')
 
-output_file = 'news_test.txt'
+output_file = 'news_test.html'
 
 ticker_news(symbols, output_file)
