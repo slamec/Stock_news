@@ -5,6 +5,8 @@ import csv
 portfolio = 'Portfolio.csv'
 
 def read_csv(file_name):
+    """Function reads tickers from a csv Yahoo.com file"""
+    
     symbols = set()
 
     with open(file_name, 'r') as file:
@@ -24,7 +26,8 @@ import yfinance as yf
 def ticker_news(stock_name):
     """This function accepts n number of ticker symbols and returns 3 top news for each."""
     
-    news_string = ""
+    #news string
+    news_string = " "
 
     # Get news for each ticker
     for symbol in stock_name:
@@ -56,17 +59,21 @@ def ticker_news(stock_name):
         
         count = 0
         
-        # Write news to file
+        # Write news to a string
         for title, link in news_dict.get(symbol, []):
-            news_string += '\n'
-            news_string += f"{symbol}"
-            news_string += f"\n<a href=\"{link}\">{title}</a>\n"
+            news_string += f"\n{symbol}\n\n"
+            news_string += f'\n'
+            news_string += f"<a href=\"{link}\">{title}</a>\n\n"
             count += 1
             if count == 3:
                 break
-        
+
+            news_string += ('<br><br>\n')
         
     return news_string
 
 
-print(ticker_news(symbols))
+# print(ticker_news(symbols))
+
+with open('news_test.html', 'w') as file:
+    file.write(ticker_news(symbols))
