@@ -61,19 +61,15 @@ def ticker_news(stock_name):
         
         # Write news to a string
         for title, link in news_dict.get(symbol, []):
-            news_string += f"\n{symbol}\n\n"
-            news_string += f'\n'
-            news_string += f"<a href=\"{link}\">{title}</a>\n\n"
+            news_string += f"<br><br>{'$'}{symbol}{':'}\n"
+            news_string += f'<a href=\"{link}\">{title}</a>\n'
             count += 1
             if count == 3:
                 break
-
-            news_string += ('<br><br>\n')
         
     return news_string
-
 
 # print(ticker_news(symbols))
 
 with open('news_test.html', 'w') as file:
-    file.write(ticker_news(symbols))
+    file.write(ticker_news(symbols)) 
